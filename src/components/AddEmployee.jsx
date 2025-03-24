@@ -16,7 +16,7 @@ function AddEmployee(props) {
 
   return (
     <>
-      <Button  onClick={handleShow} className="block mx-auto m-5 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+      <Button  onClick={handleShow} className="block m-5 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
         + Add Employee
       </Button>
 
