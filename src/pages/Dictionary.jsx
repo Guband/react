@@ -1,18 +1,9 @@
-import { useState, useEffect } from "react";
+import DefinitionSearch from "../components/DefinitionSearch";
 
 export default function Dictionary() {
-    const [word, setWord] = useState('');
-
-    useEffect(() => {
-        console.log('State updated', word)
-    });
-
-    return (
-        <>
-            <input type="text" onChange={(e) => {
-                setWord(e.target.value);
-            }} />
-            <h1>Let's get the definition for {word}</h1>
-        </>
-    )
+  return (
+    <div className="flex justify-center">
+      <DefinitionSearch />
+    </div>
+  );
 }
