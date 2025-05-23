@@ -5,6 +5,12 @@ import AddCustomer from "../components/AddCustomer";
 
 export default function Customers() {
   const [customers, setCustomers] = useState();
+  const [show, setShow] = useState(false);
+
+  function toggleShow() {
+    setShow(!show);
+  }
+
   useEffect(() => {
     const url = baseUrl + "api/customers/";
     fetch(url)
@@ -14,24 +20,29 @@ export default function Customers() {
       });
   }, []);
   function newCustomer(name, industry) {
-    const data = {name: name, industry: industry};
-    const url = baseUrl + 'api/customers/';
+    const data = { name: name, industry: industry };
+    const url = baseUrl + "api/customers/";
     fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
-    }).then((response) => {
-      if(!response.ok) {
-        throw new Error('Somthing went wrong again :/');
-      }
-      return response.json();
-    }).then((data) => {
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Somthing went wrong again :/");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        toggleShow();
+        setCustomers([...customers, data.customer]);
         // assume the add was successful
-    }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
-    });
+      });
   }
   return (
     <>
@@ -47,7 +58,11 @@ export default function Customers() {
             })
           : null}
       </ul>
-      <AddCustomer newCustomer={newCustomer}/>
+      <AddCustomer
+        newCustomer={newCustomer}
+        show={show}
+        toggleShow={toggleShow}
+      />
     </>
   );
 }
