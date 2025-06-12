@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { baseUrl } from "../shared";
 import AddCustomer from "../components/AddCustomer";
 
@@ -11,10 +11,28 @@ export default function Customers() {
     setShow(!show);
   }
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const url = baseUrl + "api/customers/";
-    fetch(url)
-      .then((response) => response.json())
+    fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access"),
+      },
+    })
+    //the state is to log on and get to the customers page
+      .then((response) => {
+        if (response.status === 401) {
+          navigate("/login", {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
+        }
+        return response.json();
+      })
       .then((data) => {
         setCustomers(data.customers);
       });
@@ -47,17 +65,19 @@ export default function Customers() {
   return (
     <>
       <h1>Here are our customers:</h1>
-      <ul>
-        {customers
-          ? customers.map((customer) => {
-              return (
-                <li key={customer.id}>
-                  <Link to={"/customers/" + customer.id}>{customer.name}</Link>
-                </li>
-              );
-            })
-          : null}
-      </ul>
+      {customers
+        ? customers.map((customer) => {
+            return (
+              <div className="m-2" key={customer.id}>
+                <Link to={"/customers/" + customer.id}>
+                  <button className="ml-2 bg-purple-600 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded">
+                    {customer.name}
+                  </button>
+                </Link>
+              </div>
+            );
+          })
+        : null}
       <AddCustomer
         newCustomer={newCustomer}
         show={show}
