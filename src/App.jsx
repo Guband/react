@@ -8,30 +8,47 @@ import Definition from "./pages/Definition";
 import NotFound from "./components/NotFound";
 import Customer from "./pages/Customer";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
+import { createContext, useState } from "react";
+
+export const LoginContext = createContext();
 
 function App() {
+  //check localStorage for an access token -->
+  const [loggedIn, setLoggedIn] = useState(localStorage.access ? true : false);
+
+  function changedLoggedIn(value) {
+    setLoggedIn(value);
+    if (value === false) {
+      localStorage.clear();
+    }
+  }
   return (
-    <BrowserRouter>
-      <Header>
-        <Routes>
-          <Route path="/employees" element={<Employees />} />
+    <LoginContext.Provider value={[loggedIn, changedLoggedIn]}>
+      <BrowserRouter>
+        <Header>
+          <Routes>
+            <Route path="/employees" element={<Employees />} />
 
-          <Route path="/dictionary" element={<Dictionary />} />
+            <Route path="/dictionary" element={<Dictionary />} />
 
-          <Route path="/dictionary/:search" element={<Definition />} />
+            <Route path="/dictionary/:search" element={<Definition />} />
 
-          <Route path="/customers" element={<Customers />} />
+            <Route path="/customers" element={<Customers />} />
 
-          <Route path="/customers/:id" element={<Customer />} />
+            <Route path="/customers/:id" element={<Customer />} />
 
-          <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login />} />
 
-          <Route path="/404" element={<NotFound />} />
+            <Route path="/register" element={<Register />} />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Header>
-    </BrowserRouter>
+            <Route path="/404" element={<NotFound />} />
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Header>
+      </BrowserRouter>
+    </LoginContext.Provider>
   );
 }
 

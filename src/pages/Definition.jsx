@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useFetch } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import NotFound from "../components/NotFound";
 import DefinitionSearch from "../components/DefinitionSearch";
+import { renderToReadableStream } from "react-dom/server";
 
 export default function Definition() {
   const [word, setWord] = useState();
@@ -44,7 +45,7 @@ export default function Definition() {
               </p>
             );
           })}
-          <p>Search Again</p>
+          <h3>Search Again</h3>
           <DefinitionSearch />
         </>
       ) : null}

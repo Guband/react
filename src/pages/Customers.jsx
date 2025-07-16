@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { baseUrl } from "../shared";
 import AddCustomer from "../components/AddCustomer";
+import { LoginContext } from "../App";
 
 export default function Customers() {
+  const [loggedIn, setLoggedIn] = useContext(LoginContext);
   const [customers, setCustomers] = useState();
   const [show, setShow] = useState(false);
 
@@ -22,9 +24,10 @@ export default function Customers() {
         Authorization: "Bearer " + localStorage.getItem("access"),
       },
     })
-    //the state is to log on and get to the customers page
+      //the state is to log on and get to the customers page
       .then((response) => {
         if (response.status === 401) {
+          setLoggedIn(false);
           navigate("/login", {
             state: {
               previousUrl: location.pathname,
